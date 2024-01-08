@@ -16,7 +16,13 @@ namespace portfolio_api.Controllers
         [HttpGet()]
         public ActionResult<String> Get()
         {
-            return Ok("<span> This is a resume data test </span>");
+            Resume resume = new Resume() {  Data = "<span> This is a resume data test </span>" };
+            return Ok(resume);
         }
     }
+}
+
+class Resume
+{
+    public String Data { get; set; }
 }
