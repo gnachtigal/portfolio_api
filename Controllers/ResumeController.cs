@@ -14,12 +14,18 @@ namespace portfolio_api.Controllers
         }
 
         [HttpGet()]
-        public ActionResult<String> Get()
+        public async Task<ActionResult<String>> Get()
         {
-            Resume resume = new Resume() {  Data = "<span> This is a resume data test </span>" };
+            HttpClient client = new HttpClient();
+            var url = "https://raw.githubusercontent.com/gnachtigal/portfolio_data/master/cv.tex";
+            var content = await client.GetStringAsync(url);
+
+            Resume resume = new Resume() {  Data = content };
+
             return Ok(resume);
         }
     }
+
 }
 
 class Resume
