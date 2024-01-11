@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using portfolio_api.Helpers;
 using portfolio_api.Models;
+using portfolio_api.Services;
 
 namespace portfolio_api.Controllers
 {
@@ -9,34 +9,19 @@ namespace portfolio_api.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly ILogger<ProfileController> _logger;
-        private readonly IMarkdownFileProcesser _mdFileProcesser;
+        private readonly IProfileService _profileService;
+        
 
-        public ProfileController(ILogger<ProfileController> logger, IMarkdownFileProcesser markdownFileProcesser)
+        public ProfileController(ILogger<ProfileController> logger, IProfileService profileService)
         {
-            _logger = logger;
-            _mdFileProcesser = markdownFileProcesser;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _profileService = profileService ?? throw new ArgumentNullException(nameof(profileService));
         }
 
         [HttpGet()]
-        public async Task<ActionResult<Profile>> Get([FromQuery] string section)
-        {
-            if (string.IsNullOrEmpty(section))
-            {
-                return BadRequest();
-            }
-            HttpClient client = new HttpClient();
-            var url = $"https://raw.githubusercontent.com/gnachtigal/portfolio_data/master/{section}.md";
-            var mdContent = await client.GetStringAsync(url);
-
-            var htmlData = _mdFileProcesser.GetHtmlFrom(mdContent);
-
-            var profile = new Profile
-            {
-                Description = htmlData
-            };
-
-            return Ok(profile);
-        }
+        public async Task<ActionResult<Profile>> Get([FromQuery] string section) 
+            => string.IsNullOrEmpty(section) ? BadRequest() 
+            : Ok(new Profile { Description = await _profileService.GetSectionHtml(section) });
     }
 
 }
