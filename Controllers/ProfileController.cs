@@ -27,7 +27,7 @@ namespace portfolio_api.Controllers
             : Ok(new Profile { Description = await _profileService.GetSectionHtml(section) });
 
         [HttpGet("changelog")]
-        public async Task<ActionResult<Profile>> Changelog() => Ok(await _githubService.GetUserPublicEvents("gnachtigal"));
+        public async Task<ActionResult<Object>> Changelog() => Ok(await _githubService.GetRepositoryLastCommits("gnachtigal", "portfolio_api"));
     }
 
 }

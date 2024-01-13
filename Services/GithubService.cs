@@ -11,15 +11,15 @@ namespace portfolio_api.Services
             _client = new GitHubClient(new ProductHeaderValue("portfolio-api"));
         }
 
-        public async Task<Object> GetUserPublicEvents(string username)
+        public async Task<Object> GetRepositoryLastCommits(string username, string repository)
         {
-            var result = await _client.Activity.Events.GetAllUserPerformed(username);
+            var result = await _client.Repository.Commit.GetAll(username, repository);
             return result;
         }
     }
 
     public interface IGithubService
     {
-        public Task<Object> GetUserPublicEvents(string username);
+        public Task<Object> GetRepositoryLastCommits(string username, string repository);
     }
 }
