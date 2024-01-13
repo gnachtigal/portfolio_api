@@ -12,6 +12,7 @@ builder.Services.AddSwaggerGen();
 
 //Services
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IGithubService, GithubService>();
 
 //Http Clients
 builder.Services.AddHttpClient<IProfileService, ProfileService>(client =>
