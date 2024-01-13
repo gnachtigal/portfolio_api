@@ -26,7 +26,7 @@ namespace portfolio_api.Controllers
             => string.IsNullOrEmpty(section) ? BadRequest() 
             : Ok(new Profile { Description = await _profileService.GetSectionHtml(section) });
 
-        [HttpGet("changelog")]
+        [HttpGet("Changelog")]
         public async Task<ActionResult<Object>> Changelog() => Ok(await _githubService.GetRepositoryLastCommits("gnachtigal", "portfolio_api"));
     }
 
