@@ -1,4 +1,5 @@
 ﻿using Octokit;
+using portfolio_api.Models;
 
 namespace portfolio_api.Services
 {
@@ -11,15 +12,15 @@ namespace portfolio_api.Services
             _client = new GitHubClient(new ProductHeaderValue("portfolio-api"));
         }
 
-        public async Task<Object> GetRepositoryLastCommits(string username, string repository)
+        public async Task<List<CommitDTO>> GetRepositoryLastCommits(string username, string repository)
         {
             var result = await _client.Repository.Commit.GetAll(username, repository);
-            return result;
+            return result.Select(c => CommitDTO.From(c)).ToList();
         }
     }
 
     public interface IGithubService
     {
-        public Task<Object> GetRepositoryLastCommits(string username, string repository);
+        public Task<List<CommitDTO>> GetRepositoryLastCommits(string username, string repository);
     }
 }
